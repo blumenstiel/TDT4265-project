@@ -3,6 +3,7 @@ from ssd.modeling.backbone.vgg import VGG
 from ssd.modeling.backbone.basic import BasicModel
 from ssd.modeling.backbone.baseline1 import Baseline1
 from ssd.modeling.backbone.mobilenetv3 import MobileNetV3
+from ssd.modeling.backbone.improved_d import ImprovedModel_d
 from ssd.modeling.box_head.box_head import SSDBoxHead
 from ssd.utils.model_zoo import load_state_dict_from_url
 from ssd import torch_utils
@@ -51,4 +52,7 @@ def build_backbone(cfg):
             model.load_state_dict(load_state_dict_from_url(
                 'https://github.com/d-li14/mobilenetv3.pytorch/raw/master/pretrained/mobilenetv3-large-1cd25616.pth'),
                 strict=False)
+        return model
+    if backbone_name == "improved_d":
+        model = ImprovedModel_d(cfg)
         return model
