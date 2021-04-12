@@ -69,7 +69,7 @@ class BasicModel(nn.Module):
 
     def forward(self, x):
         """
-        The forward functiom should output features with shape:
+        The forward function should output features with shape:
             [shape(-1, output_channels[0], 38, 38),
             shape(-1, output_channels[1], 19, 19),
             shape(-1, output_channels[2], 10, 10),
@@ -100,4 +100,3 @@ class BasicModel(nn.Module):
             assert feature.shape[1:] == expected_shape, \
                 f"Expected shape: {expected_shape}, got: {feature.shape[1:]} at output IDX: {idx}"
         return tuple(out_features)
-
