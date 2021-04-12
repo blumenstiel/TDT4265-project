@@ -7,8 +7,6 @@ from PIL import Image
 
 
 
-
-   
 class TDT4265Dataset(torch.utils.data.Dataset):
 
     class_names = ('__background__',
@@ -23,11 +21,27 @@ class TDT4265Dataset(torch.utils.data.Dataset):
         self.data_dir = data_dir
         self.transform = transform
         self.target_transform = target_transform
-        self.labels = self.read_labels(data_dir.parent.joinpath("labels.json"))
-        self.image_ids = self.remove_empty_images()
-        self.image_ids = self.split_dataset(split)
+        if split == "test":
+            self.labels = self.read_labels(data_dir.parent.joinpath("labels_test.json"))
+        else:
+            self.split = split
+            self.labels = self.read_labels(data_dir.parent.joinpath("labels.json"))
+            self.image_ids = self.split_dataset(split)
+            self.image_ids = self.filter_image_ids()
+            if split == "train":
+                self.image_ids = self.remove_empty_images()
+
 
         print(f"Dataset loaded. Subset: {split}, number of images: {len(self)}")
+
+    def filter_image_ids(self):
+        image_ids_with_image_file = []
+        for image_id in self.image_ids:
+            image_path = self.data_dir.joinpath(f"{image_id}.jpg")
+            if not image_path.is_file():
+                continue
+            image_ids_with_image_file.append(image_id)
+        return image_ids_with_image_file
 
     def remove_empty_images(self):
         """
@@ -40,13 +54,8 @@ class TDT4265Dataset(torch.utils.data.Dataset):
                 continue
             keep_idx.append(idx)
         image_ids = [self.image_ids[idx] for idx in keep_idx]
-        image_ids_with_image_file = []
-        for image_id in image_ids:
-            image_path = self.data_dir.joinpath(f"{image_id}.jpg")
-            if not image_path.is_file():
-                continue
-            image_ids_with_image_file.append(image_id)
-        return image_ids_with_image_file
+        return image_ids
+
 
     def get_categoryId_to_label_idx(self, labels):
         categories = labels["categories"]
@@ -64,12 +73,10 @@ class TDT4265Dataset(torch.utils.data.Dataset):
             f"Did not find label file: {label_path.absolute()}"
         with open(label_path, "r") as fp:
             labels = json.load(fp)
-        self.image_ids = list(set([
-            x["image_id"] for x in labels["annotations"]
-        ]))
+        self.image_ids = list(set([x["id"] for x in labels["images"]]))
         labels_processed = {
-            x["image_id"]: {"bboxes": [], "labels": []}
-            for x in labels["annotations"]
+            image_id: {"bboxes": [], "labels": []}
+            for image_id in self.image_ids
         }
         self.image_info = {
             x["id"]: x for x in labels["images"]
@@ -132,4 +139,3 @@ class TDT4265Dataset(torch.utils.data.Dataset):
     def get_img_info(self, index):
         image_id = self.image_ids[index]
         return self.image_info[image_id]
-
