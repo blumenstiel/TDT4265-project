@@ -41,6 +41,10 @@ def start_train(cfg):
         momentum=cfg.SOLVER.MOMENTUM,
         weight_decay=cfg.SOLVER.WEIGHT_DECAY
     )
+    optimizer = torch.optim.Adam(
+        model.parameters(),
+        lr=cfg.SOLVER.LR
+    )
 
 
     arguments = {"iteration": 0}
