@@ -8,18 +8,27 @@ def build_transforms(cfg, is_train=True):
         transform = [
             ConvertFromInts(),
             ToPercentCoords(),
-            Resize(cfg.INPUT.IMAGE_SIZE),
-            SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD),
-            # InvertImage(),
-            ColorJitter(brightness=0, contrast=0, saturation=0, hue=0),
-            ToTensor(),
         ]
+        if cfg.DATA_AUGMENTATION.RANDOMCROP:
+            transform.append(RandomSampleCrop())
+        transform.append(Resize(cfg.INPUT.IMAGE_SIZE))
+        transform.append(SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD))
+        if cfg.DATA_AUGMENTATION.INVERT:
+            transform.append(InvertImage())
+        if cfg.DATA_AUGMENTATION.MIRROR:
+            transform.append(RandomMirror())
+        if cfg.DATA_AUGMENTATION.COLORJITTER:
+            transform.append(ColorJitter)
+        transform.append(ToTensor())
     else:
         transform = [
             Resize(cfg.INPUT.IMAGE_SIZE),
             SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD),
-            ToTensor()
         ]
+        if cfg.DATA_AUGMENTATION.INVERT:
+            transform.append(InvertImage())
+            transform.append(ToTensor())
+
     transform = Compose(transform)
     return transform
 

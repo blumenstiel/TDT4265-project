@@ -65,6 +65,15 @@ cfg.DATA_LOADER = CN()
 cfg.DATA_LOADER.NUM_WORKERS = 4
 cfg.DATA_LOADER.PIN_MEMORY = True
 
+# -----------------------------------------------------------------------------
+# Data Augmentation
+# -----------------------------------------------------------------------------
+cfg.DATA_AUGMENTATION = CN()
+cfg.DATA_AUGMENTATION.RANDOMCROP = False
+cfg.DATA_AUGMENTATION.INVERT = False
+cfg.DATA_AUGMENTATION.MIRROR = False
+cfg.DATA_AUGMENTATION.COLORJITTER = False
+
 # ---------------------------------------------------------------------------- #
 # Solver - The same as optimizer
 # ---------------------------------------------------------------------------- #
@@ -87,8 +96,8 @@ cfg.TEST.CONFIDENCE_THRESHOLD = 0.01
 cfg.TEST.MAX_PER_CLASS = -1
 cfg.TEST.MAX_PER_IMAGE = 100
 cfg.TEST.BATCH_SIZE = 10
-cfg.EVAL_STEP = 1500 # Evaluate dataset every eval_step, disabled when eval_step < 0
-cfg.MODEL_SAVE_STEP = 1500 # Save checkpoint every save_step
+cfg.EVAL_STEP = 2000 # Evaluate dataset every eval_step, disabled when eval_step < 0
+cfg.MODEL_SAVE_STEP = 2000 # Save checkpoint every save_step
 cfg.LOG_STEP = 10 # Print logs every log_stepPrint logs every log_step
 cfg.OUTPUT_DIR = "outputs"
 cfg.DATASET_DIR = "datasets"
