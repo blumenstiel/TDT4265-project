@@ -56,3 +56,6 @@ def build_backbone(cfg):
     if backbone_name == "improved_d":
         model = ImprovedModel_d(cfg)
         return model
+    if backbone_name == "improved_minpool":
+        model = ImprovedModel_d(cfg)
+        return model
