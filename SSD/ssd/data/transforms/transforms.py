@@ -276,6 +276,14 @@ class RandomMirror(object):
 
 
 class ColorJitter(torchvision.transforms.ColorJitter):
+    """Randomly change the brightness, contrast and saturation of an image."""
     def __call__(self, image, boxes=None, classes=None):
         image = super().forward(image)
         return image, boxes, classes
+
+
+class InvertImage(object):
+    """Invert image"""
+    def __call__(self, image, boxes=None, labels=None):
+        image = cv2.bitwise_not(image)
+        return image, boxes, labels
