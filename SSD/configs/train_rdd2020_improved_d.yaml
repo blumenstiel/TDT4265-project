@@ -5,18 +5,18 @@ MODEL:
         PRETRAINED: False
         INPUT_CHANNELS: 3
         OUT_CHANNELS: [ 512, 1024, 512, 256, 256, 256 ]
-        PRIORS:
-            FEATURE_MAPS: [ [ 64, 64 ], [ 32, 32 ], [ 16, 16 ], [ 8, 8 ], [ 4, 4 ], [ 2, 2 ] ]
-    INPUT:
-        IMAGE_SIZE: [ 512, 512 ]
-    DATASETS:
-        TRAIN: ("mnist_detection_train", "mnist_detection_val")
-        TEST: ("mnist_detection_val", )
-    SOLVER:
-        OPT: 'Adam'
-        MAX_ITER: 120000
-        GAMMA: 0.1
-        BATCH_SIZE: 16
-        LR: 0.0005
+    PRIORS:
+        FEATURE_MAPS: [ [ 64, 64 ], [ 32, 32 ], [ 16, 16 ], [ 8, 8 ], [ 4, 4 ], [ 2, 2 ] ]
+INPUT:
+    IMAGE_SIZE: [ 512, 512 ]
+DATASETS:
+    TRAIN: ("rdd2020_train",)
+    TEST: ("rdd2020_val", )
+SOLVER:
+    OPT: 'Adam'
+    MAX_ITER: 120000
+    GAMMA: 0.1
+    BATCH_SIZE: 16
+    LR: 0.0005
 OUTPUT_DIR: 'outputs/rdd2020'
 DATASET_DIR: "datasets"
