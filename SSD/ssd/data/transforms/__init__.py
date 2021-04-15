@@ -10,6 +10,7 @@ def build_transforms(cfg, is_train=True):
             ToPercentCoords(),
             Resize(cfg.INPUT.IMAGE_SIZE),
             SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD),
+            ColorJitter(brightness=0, contrast=0, saturation=0, hue=0),
             ToTensor(),
         ]
     else:
