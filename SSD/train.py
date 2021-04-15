@@ -36,6 +36,7 @@ def start_train(cfg):
     model = torch_utils.to_cuda(model)
 
     if cfg.SOLVER.OPT == 'SGD':
+        print('Optimizer: SGD')
         optimizer = torch.optim.SGD(
             model.parameters(),
             lr=cfg.SOLVER.LR,
@@ -43,6 +44,7 @@ def start_train(cfg):
             weight_decay=cfg.SOLVER.WEIGHT_DECAY
         )
     elif cfg.SOLVER.OPT == 'Adam':
+        print('Optimizer: Adam')
         optimizer = torch.optim.Adam(
             model.parameters(),
             lr=cfg.SOLVER.LR

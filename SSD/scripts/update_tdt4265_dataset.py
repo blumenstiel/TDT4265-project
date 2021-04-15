@@ -8,7 +8,6 @@ import tqdm
 import tempfile
 import shutil
 
-
 zip_url = "http://oppdal.idi.ntnu.no:35689/images.zip"
 dataset_path = pathlib.Path("datasets", "tdt4265")
 
@@ -53,9 +52,10 @@ class RequestWrapper:
             f"Did not download the images. Contact the TA. Status code: {response.status_code}"
         with open(target_path, "wb") as fp:
             for data in tqdm.tqdm(
-                    response.iter_content(chunk_size=4096), total=total_length/4096,
+                    response.iter_content(chunk_size=4096), total=total_length / 4096,
                     desc="Downloading."):
                 fp.write(data)
+
 
 def download_labels(request_wrapper):
     status_code = 202
@@ -66,7 +66,7 @@ def download_labels(request_wrapper):
         if status_code == 202:
             print("The labes are being generated on the server - this could take up to 2 minutes.")
             print("Sleeping the project for 2 minutes - do not interrput the program")
-            time.sleep(60*2)
+            time.sleep(60 * 2)
             continue
         break
     if status_code != 200:
@@ -80,7 +80,6 @@ def download_labels(request_wrapper):
             fp.extract("labels_train.json", dataset_path)
     label_path = dataset_path.joinpath("labels_train.json")
     label_path.rename(label_path.parent.joinpath("labels.json"))
-    
 
 
 def make_image_symlinks(work_dataset, target_path):
@@ -92,14 +91,13 @@ def make_image_symlinks(work_dataset, target_path):
 
 
 def download_image_zip(zip_path):
-
     response = requests.get(zip_url, stream=True)
     total_length = int(response.headers.get("content-length"))
     assert response.status_code == 200, \
         f"Did not download the images. Contact the TA. Status code: {response.status_code}"
     with open(zip_path, "wb") as fp:
         for data in tqdm.tqdm(
-                response.iter_content(chunk_size=4096), total=total_length/4096,
+                response.iter_content(chunk_size=4096), total=total_length / 4096,
                 desc="Downloading images."):
             fp.write(data)
 
@@ -111,7 +109,8 @@ def download_images():
     to_delete = [image_dir, dataset_path.joinpath("test")]
     if image_dir.is_dir():
         print("The images already exists.")
-        print(f"If there are any images missing, you can download again, but first you have to delete the directory {to_delete}")
+        print(
+            f"If there are any images missing, you can download again, but first you have to delete the directory {to_delete}")
         return
     if work_dataset.is_dir():
         print("You are working on a computer with the dataset under work_dataset.")
@@ -121,7 +120,8 @@ def download_images():
     zip_path = pathlib.Path("datasets", "tdt4265", "images.zip")
     if not zip_path.is_file():
         print("The current download server does not allow for concurrent downloads.")
-        print("If the download does not start, you can download it from the server with scp (or the windows equivalent):")
+        print(
+            "If the download does not start, you can download it from the server with scp (or the windows equivalent):")
         print(f"\t scp oppdal.idi.ntnu.no:/work/datasets/images.zip {zip_path.absolute()}")
         print(f"Download the zip file and place it in the path: {zip_path.absolute()}")
         download_image_zip(zip_path)
