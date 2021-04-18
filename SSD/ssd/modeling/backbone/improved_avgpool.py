@@ -21,7 +21,7 @@ class L2Norm(nn.Module):
         return out
 
 
-class ImprovedModel_d(nn.Module):
+class AvgPoolModel(nn.Module):
     """
     This is a basic backbone for SSD.
     The feature extractor outputs a list of 6 feature maps, with the sizes:
