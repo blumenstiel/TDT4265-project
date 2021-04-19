@@ -4,7 +4,7 @@ from ssd.modeling.backbone.basic import BasicModel
 from ssd.modeling.backbone.baseline1 import Baseline1
 from ssd.modeling.backbone.mobilenetv3 import MobileNetV3
 from ssd.modeling.backbone.improved_d import ImprovedModel_d
-from ssd.modeling.backbone.improved_d import Resnext
+from ssd.modeling.backbone.resnext import Resnext
 from ssd.modeling.backbone.improved_avgpool import AvgPoolModel
 from ssd.modeling.box_head.box_head import SSDBoxHead
 from ssd.utils.model_zoo import load_state_dict_from_url
