@@ -24,5 +24,5 @@ SOLVER:
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 0.001
-OUTPUT_DIR: 'outputs/resnext1'
-DATASET_DIR: "/work/datasets"
+OUTPUT_DIR: 'outputs/rdd2020'
+DATASET_DIR: "datasets"

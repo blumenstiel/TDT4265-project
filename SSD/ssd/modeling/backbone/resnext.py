@@ -3,8 +3,9 @@ import torchvision.models as models
 from torch import nn
 
 
-class Resnext():
+class Resnext(nn.Module):
     def __init__(self, cfg):
+        super().__init__()
         self.model = models.resnext50_32x4d(pretrained=cfg.MODEL.BACKBONE.PRETRAINED, progress=True)
 
         self.add_lay5 = nn.Sequential(
