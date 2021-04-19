@@ -4,7 +4,7 @@ MODEL:
         NAME: 'resnext'
         PRETRAINED: True
         INPUT_CHANNELS: 3
-        OUT_CHANNELS: [ 512, 1024, 2048, 2048, 512, 512 ]
+        OUT_CHANNELS: [ 512, 1024, 2048, 512, 512, 128 ]
     PRIORS:
       FEATURE_MAPS: [[38,38], [19,19], [10,10], [5,5], [3,3], [2,2]]
 INPUT:
