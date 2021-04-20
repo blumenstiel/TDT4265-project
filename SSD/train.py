@@ -53,11 +53,7 @@ def start_train(cfg):
     # Add scheduler for adjusting learning rate during training
     if cfg.SOLVER.LR_SCHEDULER == 'LambdaLR':
         # set lambda function
-        if cfg.SOLVER.LAMBDA == -1:
-            lambda_func = -1
-        else:
-            lambda_func = lambda epoch: cfg.SOLVER.LAMBDA ** epoch
-
+        lambda_func = lambda epoch: cfg.SOLVER.LAMBDA ** epoch
         scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_func)
 
     if cfg.SOLVER.LR_SCHEDULER == 'OneCycleLR':
