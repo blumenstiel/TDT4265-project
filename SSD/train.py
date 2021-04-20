@@ -55,10 +55,12 @@ def start_train(cfg):
         # set lambda function
         lambda_func = lambda epoch: cfg.SOLVER.LAMBDA ** epoch
         scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_func)
-
     if cfg.SOLVER.LR_SCHEDULER == 'OneCycleLR':
         scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=cfg.SOLVER.LR * 10,
                                                         steps_per_epoch=1, epochs=cfg.SOLVER.MAX_ITER)
+    if cfg.SOLVER.LR_SCHEDULER == 'CosineAnnealingLR':
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,
+                                                               T_max=int(cfg.SOLVER.MAX_ITER/1000), eta_min=0)
 
     arguments = {"iteration": 0}
     save_to_disk = True
