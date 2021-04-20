@@ -6,10 +6,10 @@ from torch import nn
 class Resnet34(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        self.model = models.resnet34(pretrained=True, progress=True)
+        self.model = models.resnet34(pretrained=cfg.MODEL.BACKBONE.PRETRAINED, progress=True)
 
         # p value for dropout
-        self.dropout = 0
+        self.dropout = cfg.MODEL.BACKBONE.DROPOUT
 
         self.add_lay5 = nn.Sequential(
             nn.Conv2d(in_channels=512, out_channels=256, kernel_size=1, stride=1),
