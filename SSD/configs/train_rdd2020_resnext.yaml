@@ -25,5 +25,8 @@ SOLVER:
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 0.001
+    LAMBDA: 0.9
 OUTPUT_DIR: 'outputs/resnext_'
 DATASET_DIR: "datasets"
+DATA_LOADER:
+    NUM_WORKERS: 1

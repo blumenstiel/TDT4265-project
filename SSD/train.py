@@ -50,6 +50,19 @@ def start_train(cfg):
             lr=cfg.SOLVER.LR
         )
 
+    # Add scheduler for adjusting learning rate during training
+    if cfg.SOLVER.LR_SCHEDULER == 'LambdaLR':
+        # set lambda function
+        if cfg.SOLVER.LAMBDA == -1:
+            lambda_func = -1
+        else:
+            lambda_func = lambda epoch: cfg.SOLVER.LAMBDA ** epoch
+
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_func)
+
+    if cfg.SOLVER.LR_SCHEDULER == 'OneCycleLR':
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=cfg.SOLVER.LR * 10,
+                                                        steps_per_epoch=1, epochs=cfg.SOLVER.MAX_ITER)
 
     arguments = {"iteration": 0}
     save_to_disk = True
@@ -63,7 +76,7 @@ def start_train(cfg):
     train_loader = make_data_loader(cfg, is_train=True, max_iter=max_iter, start_iter=arguments['iteration'])
 
     model = do_train(
-        cfg, model, train_loader, optimizer,
+        cfg, model, train_loader, optimizer, scheduler,
         checkpointer, arguments)
     return model
 

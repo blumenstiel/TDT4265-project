@@ -23,6 +23,7 @@ def write_metric(eval_result, prefix, summary_writer, global_step):
 def do_train(cfg, model,
              data_loader,
              optimizer,
+             scheduler,
              checkpointer,
              arguments):
     logger = logging.getLogger("SSD.trainer")
@@ -51,6 +52,7 @@ def do_train(cfg, model,
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
+        scheduler.step()
 
         batch_time = time.time() - end
         end = time.time()

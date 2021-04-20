@@ -88,6 +88,10 @@ cfg.SOLVER.LR = 1e-3
 cfg.SOLVER.MOMENTUM = 0.9
 cfg.SOLVER.WEIGHT_DECAY = 5e-4
 
+# Adjust LR
+cfg.SOLVER.LR_SCHEDULER = 'LambdaLR'
+cfg.SOLVER.LAMBDA = -1.  # Example for function: lambda epoch: 0.65 ** epoch
+
 # ---------------------------------------------------------------------------- #
 # Specific test options
 # ---------------------------------------------------------------------------- #
