@@ -12,10 +12,10 @@ INPUT:
     PIXEL_MEAN: [0.485, 0.456, 0.406]
     PIXEL_STD: [0.229, 0.224, 0.225]
 DATA_AUGMENTATION:
-    RANDOMCROP: False
+    RANDOMCROP: True
     INVERT: False
-    MIRROR: False
-    COLORJITTER: False
+    MIRROR: True
+    COLORJITTER: True
 DATASETS:
     TRAIN: ("rdd2020_train",)
     TEST: ("rdd2020_val", )
