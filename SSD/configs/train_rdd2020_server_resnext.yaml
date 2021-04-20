@@ -6,7 +6,7 @@ MODEL:
         INPUT_CHANNELS: 3
         OUT_CHANNELS: [ 512, 1024, 2048, 512, 512, 128 ]
     PRIORS:
-      FEATURE_MAPS: [[38,38], [19,19], [10,10], [5,5], [3,3], [2,2]]
+      FEATURE_MAPS: [[38,38], [19,19], [10,10], [5,5], [3,3], [1,1]]
 INPUT:
     IMAGE_SIZE: [300, 300]
     PIXEL_MEAN: [0.485, 0.456, 0.406]
@@ -25,5 +25,5 @@ SOLVER:
     GAMMA: 0.1
     BATCH_SIZE: 16
     LR: 0.001
-OUTPUT_DIR: 'outputs/resnext1'
+OUTPUT_DIR: 'outputs/resnext_'
 DATASET_DIR: "/work/datasets"

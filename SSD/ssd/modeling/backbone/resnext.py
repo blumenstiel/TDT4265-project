@@ -37,8 +37,7 @@ class Resnext(nn.Module):
             nn.BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
             nn.Conv2d(in_channels=256, out_channels=128, kernel_size=1, stride=1),
             nn.BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
-            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
+            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=2, stride=1),
             nn.ReLU(inplace=True),
         )
 
@@ -69,5 +68,6 @@ class Resnext(nn.Module):
 
 
 #model = Resnext('_')
+#print(model)
 #model.forward(torch.zeros((1, 3, 300, 300)))
 
