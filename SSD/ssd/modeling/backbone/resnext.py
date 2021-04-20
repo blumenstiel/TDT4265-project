@@ -8,6 +8,9 @@ class Resnext(nn.Module):
         super().__init__()
         self.model = models.resnext50_32x4d(pretrained=cfg.MODEL.BACKBONE.PRETRAINED, progress=True)
 
+        # p value for dropout
+        self.dropout = cfg.MODEL.BACKBONE.DROPOUT
+
         self.add_lay5 = nn.Sequential(
             nn.Conv2d(in_channels=2048, out_channels=1024, kernel_size=1, stride=1),
             nn.BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
@@ -49,25 +52,28 @@ class Resnext(nn.Module):
         x = self.model.maxpool(x)
         x = self.model.layer1(x)
         x = self.model.layer2(x)
-        out_features.append(x)
+        out_features.append(nn.Dropout(p=self.dropout)(x))
         x = self.model.layer3(x)
-        out_features.append(x)
+        out_features.append(nn.Dropout(p=self.dropout)(x))
         x = self.model.layer4(x)
-        out_features.append(x)
+        out_features.append(nn.Dropout(p=self.dropout)(x))
         x = self.add_lay5(x)
-        out_features.append(x)
+        out_features.append(nn.Dropout(p=self.dropout)(x))
         x = self.add_lay6(x)
-        out_features.append(x)
+        out_features.append(nn.Dropout(p=self.dropout)(x))
         x = self.add_lay7(x)
-        out_features.append(x)
-
-        #for i in out_features:
-        #    print(i.shape)
+        out_features.append(nn.Dropout(p=self.dropout)(x))
 
         return tuple(out_features)
 
 
-#model = Resnext('_')
-#print(model)
-#model.forward(torch.zeros((1, 3, 300, 300)))
+if __name__ == '__main__':
+    # Testing resnext layers
+
+    # for testing: set dropout manually and replace cfg.MODEL.BACKBONE.PRETRAINED with "True"
+    model = Resnext('_')
+    print(model)
+    out_features = model.forward(torch.zeros((1, 3, 300, 300)))
+    for i in out_features:
+        print(i.shape)
 

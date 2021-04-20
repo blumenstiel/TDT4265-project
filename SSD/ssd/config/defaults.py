@@ -19,6 +19,7 @@ cfg.MODEL.BACKBONE.NAME = 'vgg'
 cfg.MODEL.BACKBONE.OUT_CHANNELS = (512, 1024, 512, 256, 256, 256)
 cfg.MODEL.BACKBONE.PRETRAINED = True
 cfg.MODEL.BACKBONE.INPUT_CHANNELS = 3
+cfg.MODEL.BACKBONE.DROPOUT = 0.0
 
 # -----------------------------------------------------------------------------
 # PRIORS
