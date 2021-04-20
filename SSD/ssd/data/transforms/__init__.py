@@ -9,22 +9,22 @@ def build_transforms(cfg, is_train=True):
         if cfg.DATA_AUGMENTATION.INVERT:
             transform.append(InvertImage())
         transform.append(ConvertFromInts())
-        transform.append(ToPercentCoords())
         if cfg.DATA_AUGMENTATION.RANDOMCROP:
             transform.append(RandomSampleCrop())
-        transform.append(Resize(cfg.INPUT.IMAGE_SIZE))
-        transform.append(SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD))
         if cfg.DATA_AUGMENTATION.MIRROR:
             transform.append(RandomMirror())
         if cfg.DATA_AUGMENTATION.COLORJITTER:
             transform.append(ColorJitter())
+        transform.append(ToPercentCoords())
+        transform.append(Resize(cfg.INPUT.IMAGE_SIZE))
+        transform.append(SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD))
         transform.append(ToTensor())
     else:
         transform = []
         if cfg.DATA_AUGMENTATION.INVERT:
             transform.append(InvertImage())
-        transform.append(ConvertFromInts())
-        transform.append(ToPercentCoords())
+        transform.append(Resize(cfg.INPUT.IMAGE_SIZE))
+        transform.append(SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD))
         transform.append(ToTensor())
 
     transform = Compose(transform)
