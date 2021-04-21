@@ -10,7 +10,7 @@ def build_transforms(cfg, is_train=True):
             transform.append(InvertImage())
         transform.append(ConvertFromInts())
         if cfg.DATA_AUGMENTATION.RANDOMCROP:
-            transform.append(RandomSampleCrop())
+            transform.append(RandomSampleCrop(image_size=cfg.INPUT.IMAGE_SIZE))
         if cfg.DATA_AUGMENTATION.MIRROR:
             transform.append(RandomMirror())
         if cfg.DATA_AUGMENTATION.COLORJITTER:
