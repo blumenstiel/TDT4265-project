@@ -298,3 +298,88 @@ class InvertImage(object):
     def __call__(self, image, boxes=None, labels=None):
         image = cv2.bitwise_not(image)
         return image, boxes, labels
+
+
+class ImageRatioCrop(object):
+    """
+    Crop top area or left and right area of the image to match target image ratio
+
+    Arguments:
+        img (Image): the image being input during training
+        boxes (Tensor): the original bounding boxes in pt form
+        labels (Tensor): the class labels for each bbox
+    Return:
+        (img, boxes, classes)
+            img (Image): the cropped image
+            boxes (Tensor): the adjusted bounding boxes in pt form
+            labels (Tensor): the class labels for each bbox
+    """
+
+    def __init__(self, image_size):
+        """Get image ratio
+        :param image_size: (tuple of (int, int)) target image size
+        """
+        # random crop to target image_size
+        self.image_ratio = image_size[1] / image_size[0]
+
+    def __call__(self, image, boxes=None, labels=None):
+        height, width, _ = image.shape
+
+        if height / width == self.image_ratio:
+            # skip image if current ratio matches target ratio
+            return image, boxes, labels
+
+        current_image = image
+
+        if self.image_ratio <= 1:
+            w = width
+            h = w * self.image_ratio
+
+            # crop top area of image
+            left = 0
+            top = height - h
+        else:
+            h = height
+            w = h / self.image_ratio
+
+            # crop equaly left and right
+            left = (width - w) / 2
+            top = 0
+
+
+
+        # convert to integer rect x1,y1,x2,y2
+        rect = np.array([int(left), int(top), int(left + w), int(top + h)])
+
+
+        # cut the crop from the image
+        current_image = current_image[rect[1]:rect[3], rect[0]:rect[2], :]
+
+        # keep overlap with gt box IF center in sampled patch
+        centers = (boxes[:, :2] + boxes[:, 2:]) / 2.0
+
+        # mask in all gt boxes that above and to the left of centers
+        m1 = (rect[0] < centers[:, 0]) * (rect[1] < centers[:, 1])
+
+        # mask in all gt boxes that under and to the right of centers
+        m2 = (rect[2] > centers[:, 0]) * (rect[3] > centers[:, 1])
+
+        # mask in that both m1 and m2 are true
+        mask = m1 * m2
+
+        # take only matching gt boxes
+        current_boxes = boxes[mask, :].copy()
+
+        # take only matching gt labels
+        current_labels = labels[mask]
+
+        # should we use the box left and top corner or the crop's
+        current_boxes[:, :2] = np.maximum(current_boxes[:, :2], rect[:2])
+        # adjust to crop (by substracting crop's left,top)
+        current_boxes[:, :2] -= rect[:2]
+
+        current_boxes[:, 2:] = np.minimum(current_boxes[:, 2:], rect[2:])
+        # adjust to crop (by substracting crop's left,top)
+        current_boxes[:, 2:] -= rect[:2]
+
+        return current_image, current_boxes, current_labels

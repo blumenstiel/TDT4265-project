@@ -11,6 +11,8 @@ def build_transforms(cfg, is_train=True):
         transform.append(ConvertFromInts())
         if cfg.DATA_AUGMENTATION.RANDOMCROP:
             transform.append(RandomSampleCrop(image_size=cfg.INPUT.IMAGE_SIZE))
+        else:
+            transform.append(ImageRatioCrop(cfg.INPUT.IMAGE_SIZE))
         if cfg.DATA_AUGMENTATION.MIRROR:
             transform.append(RandomMirror())
         if cfg.DATA_AUGMENTATION.COLORJITTER:
@@ -23,6 +25,7 @@ def build_transforms(cfg, is_train=True):
         transform = []
         if cfg.DATA_AUGMENTATION.INVERT:
             transform.append(InvertImage())
+        transform.append(ImageRatioCrop(cfg.INPUT.IMAGE_SIZE))
         transform.append(Resize(cfg.INPUT.IMAGE_SIZE))
         transform.append(SubtractMeans(cfg.INPUT.PIXEL_MEAN, cfg.INPUT.PIXEL_STD))
         transform.append(ToTensor())
