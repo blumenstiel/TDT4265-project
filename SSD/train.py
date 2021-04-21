@@ -53,7 +53,7 @@ def start_train(cfg):
     # Add scheduler for adjusting learning rate during training
     if cfg.SOLVER.LR_SCHEDULER == 'LambdaLR':
         # set lambda function
-        lambda_func = lambda step: cfg.SOLVER.LAMBDA ** (step/1000) + (cfg.SOLVER.LR_MIN/cfg.SOLVER.LR)
+        lambda_func = lambda step: max(cfg.SOLVER.LAMBDA ** (step/1000), (cfg.SOLVER.LR_MIN/cfg.SOLVER.LR))
         scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda_func)
     if cfg.SOLVER.LR_SCHEDULER == 'OneCycleLR':
         scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=cfg.SOLVER.LR * 10,
