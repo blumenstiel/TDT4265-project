@@ -58,6 +58,9 @@ def start_train(cfg):
     if cfg.SOLVER.LR_SCHEDULER == 'OneCycleLR':
         scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer, max_lr=cfg.SOLVER.LR * 10,
                                                         steps_per_epoch=1, epochs=cfg.SOLVER.MAX_ITER)
+    if cfg.SOLVER.LR_SCHEDULER == 'CyclicLR':
+        scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=cfg.SOLVER.LR_MIN, max_lr=cfg.SOLVER.LR,
+                                                      step_size_up=cfg.SOLVER.STEP_SIZE, mode="triangular2")
     if cfg.SOLVER.LR_SCHEDULER == 'CosineAnnealingLR':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,
                                                                T_max=int(cfg.SOLVER.MAX_ITER/1000), eta_min=0)
