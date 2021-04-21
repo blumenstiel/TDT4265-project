@@ -31,3 +31,5 @@ SOLVER:
     LAMBDA: 1.
 OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_480_270'
 DATASET_DIR: "datasets"
+DATA_LOADER:
+    NUM_WORKERS: 2

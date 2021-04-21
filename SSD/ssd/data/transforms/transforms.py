@@ -347,7 +347,6 @@ class ImageRatioCrop(object):
             top = 0
 
 
-
         # convert to integer rect x1,y1,x2,y2
         rect = np.array([int(left), int(top), int(left + w), int(top + h)])
 
@@ -366,6 +365,10 @@ class ImageRatioCrop(object):
 
         # mask in that both m1 and m2 are true
         mask = m1 * m2
+
+        # have any valid boxes? return original images to prevent errors
+        if not mask.any():
+            return image, boxes, labels
 
         # take only matching gt boxes
         current_boxes = boxes[mask, :].copy()

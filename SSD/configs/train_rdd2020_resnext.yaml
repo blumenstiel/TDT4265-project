@@ -31,3 +31,5 @@ SOLVER:
     LAMBDA: 0.9
 OUTPUT_DIR: 'outputs/resnext_'
 DATASET_DIR: "datasets"
+DATA_LOADER:
+    NUM_WORKERS: 2
