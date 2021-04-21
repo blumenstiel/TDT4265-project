@@ -6,10 +6,10 @@ from torch import nn
 class Resnext(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        self.model = models.resnext50_32x4d(pretrained=cfg.MODEL.BACKBONE.PRETRAINED, progress=True)
+        self.model = models.resnext50_32x4d(pretrained=True, progress=True)
 
         # p value for dropout
-        self.dropout = cfg.MODEL.BACKBONE.DROPOUT
+        self.dropout =0
 
         self.add_lay5 = nn.Sequential(
             nn.Conv2d(in_channels=2048, out_channels=1024, kernel_size=1, stride=1),
@@ -44,6 +44,20 @@ class Resnext(nn.Module):
             nn.ReLU(inplace=True),
         )
 
+        # initialize weights using xavier initialization
+        for layer in self.add_lay5:
+            if isinstance(layer, nn.Conv2d):
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.zeros_(layer.bias)
+        for layer in self.add_lay6:
+            if isinstance(layer, nn.Conv2d):
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.zeros_(layer.bias)
+        for layer in self.add_lay7:
+            if isinstance(layer, nn.Conv2d):
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.zeros_(layer.bias)
+
     def forward(self, x):
         out_features = []
         x = self.model.conv1(x)
@@ -73,7 +87,7 @@ if __name__ == '__main__':
     # for testing: set dropout manually and replace cfg.MODEL.BACKBONE.PRETRAINED with "True"
     model = Resnext('_')
     print(model)
-    out_features = model.forward(torch.zeros((1, 3, 300, 300)))
+    out_features = model.forward(torch.zeros((1, 3, 480, 270)))
     for i in out_features:
         print(i.shape)
 
