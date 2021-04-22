@@ -37,6 +37,10 @@ if __name__ == "__main__":
            old = line
            line = '    TRAIN: ("tdt4265_train",)\n'
            print(f"overwriting: {old} with {line}")
+       if line == '    TRAIN: ("rdd2020_train_oversampling",)\n':
+           old = line
+           line = '    TRAIN: ("tdt4265_train",)\n'  # TODO Add oversamling for tdt dataset
+           print(f"overwriting: {old} with {line}")
        if line == '    TEST: ("rdd2020_val", )\n':
            old = line
            line = '    TEST: ("tdt4265_val", )\n'

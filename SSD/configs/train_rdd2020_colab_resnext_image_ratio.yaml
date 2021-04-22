@@ -21,7 +21,7 @@ DATA_AUGMENTATION:
     MIRROR: True
     COLORJITTER: True
 DATASETS:
-    TRAIN: ("rdd2020_train",)
+    TRAIN: ("rdd2020_train_oversampling",)
     TEST: ("rdd2020_val", )
 SOLVER:
     OPT: 'SGD'
@@ -33,6 +33,6 @@ SOLVER:
     STEP_SIZE: 2000
     LR_SCHEDULER: 'CyclicLR'
 OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_480x270'
-DATASET_DIR: "datasets"
+DATASET_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/datasets'
 DATA_LOADER:
     NUM_WORKERS: 4
