@@ -158,6 +158,8 @@ class RandomSampleCrop(object):
         # random crop to target image_size
         if image_size is not None:
             self.image_ratio = image_size[1] / image_size[0]
+        else:
+            self.image_ratio = False
 
     def __call__(self, image, boxes=None, labels=None):
         # guard against no boxes
