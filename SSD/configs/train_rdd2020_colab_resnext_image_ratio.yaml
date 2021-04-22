@@ -5,6 +5,7 @@ MODEL:
         PRETRAINED: True
         INPUT_CHANNELS: 3
         OUT_CHANNELS: [ 512, 1024, 2048, 512, 512, 128 ]
+        DROPOUT: 0.2
     PRIORS:
       FEATURE_MAPS: [[60, 34], [30, 17], [15,9], [8,5], [4,3], [1,1]]
       STRIDES: [[8, 8], [16, 16], [32, 30], [60, 54], [120, 90], [480, 270]]
@@ -26,10 +27,12 @@ SOLVER:
     OPT: 'SGD'
     MAX_ITER: 40000
     GAMMA: 0.1
-    BATCH_SIZE: 16
-    LR: 0.001
-    LAMBDA: 1.
-OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_480_270'
+    BATCH_SIZE: 32
+    LR: 0.01
+    LR_MIN: 0.0001
+    STEP_SIZE: 2000
+    LR_SCHEDULER: 'CyclicLR'
+OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_480x270'
 DATASET_DIR: "datasets"
 DATA_LOADER:
-    NUM_WORKERS: 2
+    NUM_WORKERS: 4
