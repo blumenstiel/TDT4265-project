@@ -64,7 +64,8 @@ def start_train(cfg):
     if cfg.SOLVER.LR_SCHEDULER == 'CosineAnnealingLR':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,
                                                                T_max=int(cfg.SOLVER.MAX_ITER/1000), eta_min=0)
-
+    if cfg.SOLVER.LR_SCHEDULER == 'MultiStepLR':
+        scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10000, 20000], gamma=0.1)
     arguments = {"iteration": 0}
     save_to_disk = True
     checkpointer = CheckPointer(
