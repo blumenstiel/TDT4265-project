@@ -63,7 +63,8 @@ def start_train(cfg):
                                                       step_size_up=cfg.SOLVER.STEP_SIZE, mode="triangular2")
     if cfg.SOLVER.LR_SCHEDULER == 'CosineAnnealingLR':
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,
-                                                               T_max=int(cfg.SOLVER.MAX_ITER/1000), eta_min=0)
+                                                               T_max=int(1000),
+                                                               eta_min=cfg.SOLVER.LR_MIN)
 
     arguments = {"iteration": 0}
     save_to_disk = True
