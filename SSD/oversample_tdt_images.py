@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import json
 import numpy as np
+import glob
 
 
 class_names = ('__background__',
@@ -13,6 +14,9 @@ def read_labels(label_path):
     global image_ids, labels_processed
     with open(label_path, "r") as fp:
         labels = json.load(fp)
+    labels = filter_json_label(labels)
+    print(len(labels['images']))
+
     image_ids = list(set([x["id"] for x in labels["images"]]))
     labels_processed = {
         image_id: {"bboxes": [], "labels": []}
@@ -54,9 +58,43 @@ def _get_annotation(labels, image_id):
         labels[idx] = annotations["labels"][idx]
     return boxes, labels
 
-def get_annotation(labels, index):
-    image_id = image_ids[index]
-    return _get_annotation(labels, image_id)
+
+def filter_json_label(json_label):
+    image_paths = glob.glob('datasets/tdt4265/train/*.jpg')
+    image_ids = [int(p.split('/')[-1][:-4]) for p in image_paths]
+
+    filtered_imgs = []
+
+    for img in json_label['images']:
+        if img['id'] in image_ids:
+            filtered_imgs.append(img)
+
+    json_label['images'] = filtered_imgs
+
+    filtered_annots = []
+
+    for img in json_label['annotations']:
+        if img['image_id'] in image_ids:
+            filtered_annots.append(img)
+
+    json_label['annotations'] = filtered_annots
+
+    return json_label
+
+
+def filter_train_images(labels):
+    image_paths = glob.glob('datasets/tdt4265/train/*.jpg')
+    image_ids = [int(p.split('/')[-1][:-4]) for p in image_paths]
+
+    filtered_labels = dict()
+    # for img in json_label['images']:
+
+    for img_id in labels.keys():
+        if img_id in image_ids:
+            filtered_labels[img_id] = labels[img_id]
+
+    return filtered_labels
+
 
 if __name__ == "__main__":
     labels = read_labels("datasets/tdt4265/labels.json")
@@ -69,13 +107,13 @@ if __name__ == "__main__":
     d10 = []
     d20 = []
     d40 = []
-    drop = []
+    drop_d00 = []
     print('Number images old:', len(image_ids))
 
-    for idx in range(len(image_ids)):
-        box, label = get_annotation(labels, idx)
+    for idx in labels.keys():
+        box, label = _get_annotation(labels, idx)
         if len(label) == 1 and label[0]==1:
-            drop.append(idx)
+            drop_d00.append(idx)
         for l in label:
             if l == 1:
                 d00.append(idx)
@@ -89,7 +127,7 @@ if __name__ == "__main__":
     print('D10:', len(d10))
     print('D20:', len(d20))
     print('D40:', len(d40))
-    print(len(drop))
+    print('drop_d00:', len(drop_d00))
 
     print('Total labels:', len(d00) + len(d10) + len(d20) + len(d40))
 
