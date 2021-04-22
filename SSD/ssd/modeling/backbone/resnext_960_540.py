@@ -3,13 +3,13 @@ import torchvision.models as models
 from torch import nn
 
 
-class Resnext(nn.Module):
+class Resnext960(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        self.model = models.resnext50_32x4d(pretrained=True, progress=True)
+        self.model = models.resnext50_32x4d(pretrained=cfg.MODEL.BACKBONE.PRETRAINED, progress=True)
 
         # p value for dropout
-        self.dropout = 0.
+        self.dropout = cfg.MODEL.BACKBONE.DROPOUT
 
         self.add_lay5 = nn.Sequential(
             nn.Conv2d(in_channels=2048, out_channels=1024, kernel_size=1, stride=1),
@@ -36,11 +36,11 @@ class Resnext(nn.Module):
         self.add_lay7 = nn.Sequential(
             nn.Conv2d(in_channels=512, out_channels=256, kernel_size=1, stride=1),
             nn.BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=2, padding=1, stride=2),
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, padding=1, stride=2),
             nn.BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
-            nn.Conv2d(in_channels=256, out_channels=128, kernel_size=1, stride=2),
+            nn.Conv2d(in_channels=256, out_channels=128, kernel_size=1, stride=1),
             nn.BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
-            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=2, stride=2),
+            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=2),
             nn.ReLU(inplace=True),
         )
 
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     # Testing resnext layers
 
     # for testing: set dropout manually and replace cfg.MODEL.BACKBONE.PRETRAINED with "True"
-    model = Resnext('_')
+    model = Resnext960('_')
     print(model)
     out_features = model.forward(torch.zeros((1, 3, 960, 540)))
 

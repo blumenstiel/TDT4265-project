@@ -5,6 +5,7 @@ from ssd.modeling.backbone.baseline1 import Baseline1
 from ssd.modeling.backbone.mobilenetv3 import MobileNetV3
 from ssd.modeling.backbone.improved_d import ImprovedModel_d
 from ssd.modeling.backbone.resnext import Resnext
+from ssd.modeling.backbone.resnext_960_540 import Resnext960
 from ssd.modeling.backbone.resnet34 import Resnet34
 from ssd.modeling.backbone.improved_avgpool import AvgPoolModel
 from ssd.modeling.box_head.box_head import SSDBoxHead
@@ -64,6 +65,9 @@ def build_backbone(cfg):
         return model
     if backbone_name == "resnext":
         model = Resnext(cfg)
+        return model
+    if backbone_name == "resnext960":
+        model = Resnext960(cfg)
         return model
     if backbone_name == "resnet34":
         model = Resnet34(cfg)

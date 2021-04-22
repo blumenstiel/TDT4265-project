@@ -1,0 +1,40 @@
+MODEL:
+    NUM_CLASSES: 5
+    BACKBONE:
+        NAME: 'resnext960'
+        PRETRAINED: True
+        INPUT_CHANNELS: 3
+        OUT_CHANNELS: [ 512, 1024, 2048, 512, 512, 128 ]
+        DROPOUT: 0.2
+    PRIORS:
+      FEATURE_MAPS: [[120, 68], [60, 34], [30, 17], [15, 9], [8, 5], [1, 1]]
+      STRIDES: [ [ 8, 8 ], [ 16, 16 ], [ 32, 32 ], [ 64, 60 ], [ 120, 108 ], [ 960, 540 ] ]
+      MIN_SIZES: [ [ 96,   54 ], [ 192,  108 ], [ 355,  199 ], [ 518,  291 ], [ 681,  383 ], [ 844,  475 ] ]
+      MAX_SIZES: [ [ 192,  108 ], [ 355,  199 ], [ 518,  291 ], [ 681,  383 ], [ 844,  475 ], [ 1008,  567 ] ]
+INPUT:
+    IMAGE_SIZE: [960, 540]
+    PIXEL_MEAN: [0.485, 0.456, 0.406]
+    PIXEL_STD: [0.229, 0.224, 0.225]
+DATA_AUGMENTATION:
+    RANDOMCROP: False
+    INVERT: False
+    MIRROR: True
+    COLORJITTER: True
+    PADDING: True
+    RATIOCROP: False
+DATASETS:
+    TRAIN: ("rdd2020_train",)
+    TEST: ("rdd2020_val", )
+SOLVER:
+    OPT: 'SGD'
+    MAX_ITER: 40000
+    GAMMA: 0.1
+    BATCH_SIZE: 32
+    LR: 0.01
+    LR_MIN: 0.0001
+    STEP_SIZE: 2000
+    LR_SCHEDULER: 'CyclicLR'
+OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_960x540'
+DATASET_DIR: 'datasets'
+DATA_LOADER:
+    NUM_WORKERS: 1
