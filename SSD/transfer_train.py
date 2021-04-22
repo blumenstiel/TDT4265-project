@@ -28,8 +28,9 @@ if __name__ == "__main__":
     }
     torch.save(new_checkpoint, str(new_checkpoint_path))
     del new_checkpoint
+
     with open(new_output_dir.joinpath("last_checkpoint.txt"), "w") as fp:
-        fp.writelines(new_checkpoint_path)
+        fp.writelines(str(new_checkpoint_path))
 
     with open(args.config_file, "r") as fp:
         old_config_lines = fp.readlines()
