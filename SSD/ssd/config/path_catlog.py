@@ -84,6 +84,10 @@ class DatasetCatalog:
             "data_dir": "RDD2020_filtered",
             "split": "train"
         },
+        "rdd2020_train_oversampling": {
+            "data_dir": "RDD2020_filtered",
+            "split": "train_oversampling"
+        },
         "rdd2020_val": {
             "data_dir": "RDD2020_filtered",
             "split": "val"
