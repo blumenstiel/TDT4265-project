@@ -27,7 +27,7 @@ cfg.MODEL.BACKBONE.DROPOUT = 0.0
 cfg.MODEL.PRIORS = CN()
 # X, Y 
 cfg.MODEL.PRIORS.FEATURE_MAPS = [[38, 38], [19, 19], [10, 10], [5, 5], [3, 3], [1, 1]]
-# X, Y
+# X, Y (calculate: image_size / feature_maps)
 cfg.MODEL.PRIORS.STRIDES = [[8, 8], [16, 16], [32, 32], [64, 64], [100, 100], [300, 300]]
 # X, Y
 cfg.MODEL.PRIORS.MIN_SIZES = [[30, 30], [60, 60], [111, 111], [162, 162], [213, 213], [264, 264]]
@@ -74,6 +74,8 @@ cfg.DATA_AUGMENTATION.RANDOMCROP = False
 cfg.DATA_AUGMENTATION.INVERT = False
 cfg.DATA_AUGMENTATION.MIRROR = False
 cfg.DATA_AUGMENTATION.COLORJITTER = False
+cfg.DATA_AUGMENTATION.PADDING = False
+cfg.DATA_AUGMENTATION.RATIOCROP = False
 
 # ---------------------------------------------------------------------------- #
 # Solver - The same as optimizer

@@ -389,3 +389,57 @@ class ImageRatioCrop(object):
         current_boxes[:, 2:] -= rect[:2]
 
         return current_image, current_boxes, current_labels
+
+
+class PadImage(object):
+    """
+    Crop top area or left and right area of the image to match target image ratio
+
+    Arguments:
+        img (Image): the image being input during training
+        boxes (Tensor): the original bounding boxes in pt form
+        labels (Tensor): the class labels for each bbox
+    Return:
+        (img, boxes, classes)
+            img (Image): the padded image
+            boxes (Tensor): the adjusted bounding boxes in pt form
+            labels (Tensor): the class labels for each bbox
+    """
+
+    def __init__(self, image_size):
+        """Get image ratio
+        :param image_size: (tuple of (int, int)) target image size
+        """
+        # random crop to target image_size
+        self.image_ratio = image_size[1] / image_size[0]
+
+    def __call__(self, image, boxes=None, labels=None):
+        height, width, _ = image.shape
+
+        if height / width == self.image_ratio:
+            # skip image if current ratio matches target ratio
+            return image, boxes, labels
+
+        if self.image_ratio <= 1:
+            h = height
+            w = h / self.image_ratio
+
+            left = int((w - width) / 2)
+            top = 0
+            image = np.pad(image, ((0, 0), (left, left), (0, 0)))
+
+        else:
+            w = width
+            h = w / self.image_ratio
+
+            left = 0
+            top = int((h - height) / 2)
+
+            image = np.pad(image, ((top, top), (0, 0), (0, 0)))
+
+        # adjust to padding (by adding crop's left,top)
+        boxes[:, :2] += [left, top]
+        boxes[:, 2:] += [left, top]
+
+        return image, boxes, labels
+
