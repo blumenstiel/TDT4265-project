@@ -31,9 +31,73 @@ class TDT4265Dataset(torch.utils.data.Dataset):
             self.image_ids = self.filter_image_ids()
             if split == "train":
                 self.image_ids = self.remove_empty_images()
+                self.sampling()
 
 
         print(f"Dataset loaded. Subset: {split}, number of images: {len(self)}")
+
+    def sampling(self):
+        d00 = []
+        d10 = []
+        d20 = []
+        d40 = []
+        drop_d00 = []
+        print('Number images old:', len(self.image_ids))
+
+        for id in self.image_ids:
+            box, label = self._get_annotation(id)
+            if len(label) == 1 and label[0] == 1:
+                drop_d00.append(id)
+            for l in label:
+                if l == 1:
+                    d00.append(id)
+                if l == 2:
+                    d10.append(id)
+                if l == 3:
+                    d20.append(id)
+                if l == 4:
+                    d40.append(id)
+        print('D00:', len(d00))
+        print('D10:', len(d10))
+        print('D20:', len(d20))
+        print('D40:', len(d40))
+        print('drop_d00:', len(drop_d00))
+
+        print('Total labels:', len(d00) + len(d10) + len(d20) + len(d40))
+        drop = drop_d00[:10000]
+        for id in drop:
+            self.image_ids.remove(id)
+
+
+        d20 = d20 * 2
+        d40 = d40 * 3
+
+        self.image_ids.extend(d10)
+        self.image_ids.extend(d20)
+        self.image_ids.extend(d40)
+
+        d00 = []
+        d10 = []
+        d20 = []
+        d40 = []
+        drop = []
+        print('Number images new:', len(self.image_ids))
+
+        for id in self.image_ids:
+            box, label = self._get_annotation(id)
+            for l in label:
+                if l == 1:
+                    d00.append(id)
+                if l == 2:
+                    d10.append(id)
+                if l == 3:
+                    d20.append(id)
+                if l == 4:
+                    d40.append(id)
+        print('D00:', len(d00))
+        print('D10:', len(d10))
+        print('D20:', len(d20))
+        print('D40:', len(d40))
 
     def filter_image_ids(self):
         image_ids_with_image_file = []

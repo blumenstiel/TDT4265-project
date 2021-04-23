@@ -110,10 +110,45 @@ if __name__ == "__main__":
     drop_d00 = []
     print('Number images old:', len(image_ids))
 
+    for id in labels.keys():
+        box, label = _get_annotation(labels, id)
+        if len(label) == 1 and label[0] == 1:
+            drop_d00.append(id)
+        for l in label:
+            if l == 1:
+                d00.append(id)
+            if l == 2:
+                d10.append(id)
+            if l == 3:
+                d20.append(id)
+            if l == 4:
+                d40.append(id)
+    print('D00:', len(d00))
+    print('D10:', len(d10))
+    print('D20:', len(d20))
+    print('D40:', len(d40))
+    print('drop_d00:', len(drop_d00))
+
+    print('Total labels:', len(d00) + len(d10) + len(d20) + len(d40))
+
+    image_ids_copy = image_ids.copy()
+    for im in drop_d00:
+        image_ids_copy.remove(im)
+        del labels[im]
+
+
+
+    d00 = []
+    d10 = []
+    d20 = []
+    d40 = []
+    drop = []
+    print('Number images new:', len(image_ids_copy))
+
     for idx in labels.keys():
         box, label = _get_annotation(labels, idx)
-        if len(label) == 1 and label[0]==1:
-            drop_d00.append(idx)
+        if len(label) == 1 and label[0] == 1:
+            drop.append(idx)
         for l in label:
             if l == 1:
                 d00.append(idx)
@@ -127,40 +162,10 @@ if __name__ == "__main__":
     print('D10:', len(d10))
     print('D20:', len(d20))
     print('D40:', len(d40))
-    print('drop_d00:', len(drop_d00))
 
-    print('Total labels:', len(d00) + len(d10) + len(d20) + len(d40))
+    print(len(drop))
 
-    #image_ids_copy = image_ids.copy()
-    #for im in drop:
-    #    image_ids_copy.remove(image_ids[im])
-#
-    #d00 = []
-    #d10 = []
-    #d20 = []
-    #d40 = []
-    #drop = []
-    #print('Number images old:', len(image_ids_copy))
-#
-    #for idx in range(len(image_ids_copy)):
-    #    box, label = get_annotation(labels, idx)
-    #    if len(label) == 1 and label[0] == 1:
-    #        drop.append(idx)
-    #    for l in label:
-    #        if l == 1:
-    #            d00.append(idx)
-    #        if l == 2:
-    #            d10.append(idx)
-    #        if l == 3:
-    #            d20.append(idx)
-    #        if l == 4:
-    #            d40.append(idx)
-    #print('D00:', len(d00))
-    #print('D10:', len(d10))
-    #print('D20:', len(d20))
-    #print('D40:', len(d40))
-#
-#
+
 
     #d10 = list(set(d10))
     #content_list.extend(d10)
