@@ -69,13 +69,13 @@ class TDT4265Dataset(torch.utils.data.Dataset):
         for id in drop:
             self.image_ids.remove(id)
 
+        # empirically determined values that lead to a more or less balanced dataset
         d20 = d20 * 2
         d40 = d40 * 3
         self.image_ids.extend(d10)
         self.image_ids.extend(d20)
         self.image_ids.extend(d40)
         print('Number images new:', len(self.image_ids))
-
         d00 = []
         d10 = []
         d20 = []
