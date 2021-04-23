@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from numpy import random
 import torchvision
+from PIL import Image, ImageDraw
 
 
 def intersect(box_a, box_b):
@@ -332,8 +333,6 @@ class ImageRatioCrop(object):
             # skip image if current ratio matches target ratio
             return image, boxes, labels
 
-        current_image = image
-
         if self.image_ratio <= 1:
             w = width
             h = w * self.image_ratio
@@ -349,46 +348,45 @@ class ImageRatioCrop(object):
             left = (width - w) / 2
             top = 0
 
-
         # convert to integer rect x1,y1,x2,y2
         rect = np.array([int(left), int(top), int(left + w), int(top + h)])
 
-
         # cut the crop from the image
-        current_image = current_image[rect[1]:rect[3], rect[0]:rect[2], :]
+        image = image[rect[1]:rect[3], rect[0]:rect[2], :]
 
-        # keep overlap with gt box IF center in sampled patch
-        centers = (boxes[:, :2] + boxes[:, 2:]) / 2.0
+        if boxes is not None:
+            # keep overlap with gt box IF center in sampled patch
+            centers = (boxes[:, :2] + boxes[:, 2:]) / 2.0
 
-        # mask in all gt boxes that above and to the left of centers
-        m1 = (rect[0] < centers[:, 0]) * (rect[1] < centers[:, 1])
+            # mask in all gt boxes that above and to the left of centers
+            m1 = (rect[0] < centers[:, 0]) * (rect[1] < centers[:, 1])
 
-        # mask in all gt boxes that under and to the right of centers
-        m2 = (rect[2] > centers[:, 0]) * (rect[3] > centers[:, 1])
+            # mask in all gt boxes that under and to the right of centers
+            m2 = (rect[2] > centers[:, 0]) * (rect[3] > centers[:, 1])
 
-        # mask in that both m1 and m2 are true
-        mask = m1 * m2
+            # mask in that both m1 and m2 are true
+            mask = m1 * m2
 
-        # have any valid boxes? return original images to prevent errors
-        if not mask.any():
-            return image, boxes, labels
+            # have any valid boxes? return original images to prevent errors
+            if not mask.any():
+                return image, boxes, labels
 
-        # take only matching gt boxes
-        current_boxes = boxes[mask, :].copy()
+            # take only matching gt boxes
+            boxes = boxes[mask, :].copy()
 
-        # take only matching gt labels
-        current_labels = labels[mask]
+            # take only matching gt labels
+            labels = labels[mask]
 
-        # should we use the box left and top corner or the crop's
-        current_boxes[:, :2] = np.maximum(current_boxes[:, :2], rect[:2])
-        # adjust to crop (by substracting crop's left,top)
-        current_boxes[:, :2] -= rect[:2]
+            # should we use the box left and top corner or the crop's
+            boxes[:, :2] = np.maximum(boxes[:, :2], rect[:2])
+            # adjust to crop (by subtracting crop's left,top)
+            boxes[:, :2] -= rect[:2]
 
-        current_boxes[:, 2:] = np.minimum(current_boxes[:, 2:], rect[2:])
-        # adjust to crop (by substracting crop's left,top)
-        current_boxes[:, 2:] -= rect[:2]
+            boxes[:, 2:] = np.minimum(boxes[:, 2:], rect[2:])
+            # adjust to crop (by subtracting crop's left,top)
+            boxes[:, 2:] -= rect[:2]
 
-        return current_image, current_boxes, current_labels
+        return image, boxes, labels
 
 
 class PadImage(object):
@@ -437,9 +435,9 @@ class PadImage(object):
 
             image = np.pad(image, ((top, top), (0, 0), (0, 0)))
 
-        # adjust to padding (by adding crop's left,top)
-        boxes[:, :2] += [left, top]
-        boxes[:, 2:] += [left, top]
+        if boxes is not None:
+            # adjust to padding (by adding crop's left,top)
+            boxes[:, :2] += [left, top]
+            boxes[:, 2:] += [left, top]
 
         return image, boxes, labels
-
