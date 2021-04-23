@@ -37,17 +37,18 @@ class TDT4265Dataset(torch.utils.data.Dataset):
         print(f"Dataset loaded. Subset: {split}, number of images: {len(self)}")
 
     def sampling(self):
+        print('Number images old:', len(self.image_ids))
         d00 = []
         d10 = []
         d20 = []
         d40 = []
         drop_d00 = []
-        print('Number images old:', len(self.image_ids))
-
         for id in self.image_ids:
             box, label = self._get_annotation(id)
             if len(label) == 1 and label[0] == 1:
+                # find images that only contain D00
                 drop_d00.append(id)
+            # get lists of image ids for each label
             for l in label:
                 if l == 1:
                     d00.append(id)
@@ -63,26 +64,22 @@ class TDT4265Dataset(torch.utils.data.Dataset):
         print('D40:', len(d40))
         print('drop_d00:', len(drop_d00))
 
-        print('Total labels:', len(d00) + len(d10) + len(d20) + len(d40))
+        # drop 10,000 images that only contain D00
         drop = drop_d00[:10000]
         for id in drop:
             self.image_ids.remove(id)
 
-
         d20 = d20 * 2
         d40 = d40 * 3
-
         self.image_ids.extend(d10)
         self.image_ids.extend(d20)
         self.image_ids.extend(d40)
+        print('Number images new:', len(self.image_ids))
 
         d00 = []
         d10 = []
         d20 = []
         d40 = []
-        drop = []
-        print('Number images new:', len(self.image_ids))
-
         for id in self.image_ids:
             box, label = self._get_annotation(id)
             for l in label:
