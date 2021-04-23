@@ -27,17 +27,17 @@ DATASETS:
     TEST: ("rdd2020_val", )
 SOLVER:
     OPT: 'SGD'
-    MAX_ITER: 40000
-    BATCH_SIZE: 32
-    LR: 0.01
+    MAX_ITER: 60000
+    BATCH_SIZE: 12
+    LR: 0.02
     LR_MIN: 0.001
-    STEP_SIZE: 2000
+    STEP_SIZE: 2500
     LR_SCHEDULER: 'ExpCyclicLR'
 OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_960x540_ExpCyclicLR'
 DATASET_DIR: 'datasets'
 DATA_LOADER:
     NUM_WORKERS: 2
-EVAL_STEP: 4000
-MODEL_SAVE_STEP: 4000
+EVAL_STEP: 5000
+MODEL_SAVE_STEP: 5000
 TEST:
     BATCH_SIZE: 4
