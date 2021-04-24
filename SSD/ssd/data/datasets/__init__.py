@@ -9,7 +9,7 @@ _DATASETS = {
     'VOCDataset': VOCDataset,
     'MNISTDetection': MNISTDetection,
     'TDT4265Dataset': TDT4265Dataset,
-    'TDT4265Dataset_sampling ': TDT4265Dataset_sampling ,
+    'TDT4265Dataset_sampling': TDT4265Dataset_sampling,
     "RDDDataset": RDDDataset 
 }
 
