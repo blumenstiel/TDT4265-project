@@ -11,7 +11,7 @@ def build_transforms(cfg, is_train=True):
         transform.append(ConvertFromInts())
         if cfg.DATA_AUGMENTATION.RANDOMCROP and cfg.DATA_AUGMENTATION.RATIOCROP:
             transform.append(RandomSampleCrop(image_size=cfg.INPUT.IMAGE_SIZE))
-        if cfg.DATA_AUGMENTATION.RANDOMCROP:
+        elif cfg.DATA_AUGMENTATION.RANDOMCROP:
             transform.append(RandomSampleCrop())
         elif cfg.DATA_AUGMENTATION.RATIOCROP:
             transform.append(ImageRatioCrop(cfg.INPUT.IMAGE_SIZE))

@@ -7,9 +7,12 @@ MODEL:
         OUT_CHANNELS: [ 512, 1024, 2048, 512, 512, 128 ]
         DROPOUT: 0.2
     PRIORS:
-      FEATURE_MAPS: [[38,38], [19,19], [10,10], [5,5], [3,3], [1,1]]
+      FEATURE_MAPS: [[75, 75], [38, 38], [19, 19], [10, 10], [5, 5], [2, 2]]
+      STRIDES: [[8, 8], [16, 16], [32, 32], [60, 60], [120, 120], [300, 300]]
+      MIN_SIZES: [ [ 60,  60 ], [ 120, 120 ], [ 222, 222 ], [ 324, 324 ], [ 426, 426 ], [ 528, 528 ] ]
+      MAX_SIZES: [ [ 120, 120 ], [ 222, 222 ], [ 324, 324 ], [ 426, 426 ], [ 528, 528 ], [630, 630] ]
 INPUT:
-    IMAGE_SIZE: [300, 300]
+    IMAGE_SIZE: [600, 600]
     PIXEL_MEAN: [0.485, 0.456, 0.406]
     PIXEL_STD: [0.229, 0.224, 0.225]
 DATA_AUGMENTATION:
@@ -24,10 +27,12 @@ SOLVER:
     OPT: 'SGD'
     MAX_ITER: 40000
     GAMMA: 0.1
-    BATCH_SIZE: 32
+    BATCH_SIZE: 16
     LR: 0.01
     LR_MIN: 0.0001
     STEP_SIZE: 1000
     LR_SCHEDULER: 'ExpCyclicLR'
-OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext'
-DATASET_DIR: 'datasets'
+OUTPUT_DIR: '/content/drive/MyDrive/Deep Learning und Computer Vision - Group 5 - Final Project/outputs/resnext_600x600_ExpCyclicLR'
+DATASET_DIR: "datasets"
+DATA_LOADER:
+    NUM_WORKERS: 2
