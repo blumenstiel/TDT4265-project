@@ -162,6 +162,8 @@ class RandomSampleCrop(object):
         else:
             self.image_ratio = False
 
+        self.keep_ratio = False
+
     def __call__(self, image, boxes=None, labels=None):
         # guard against no boxes
         if boxes is not None and boxes.shape[0] == 0:
@@ -183,21 +185,37 @@ class RandomSampleCrop(object):
             for _ in range(50):
                 current_image = image
 
-                w = random.uniform(0.3 * width, width)
 
-                if self.image_ratio:
+
+                if self.keep_ratio and self.image_ratio:
                     # crop image in same ratio as image_size
+                    w = random.uniform(0.3 * width, width)
                     h = w * self.image_ratio
 
                     if h > height:
                         # in case of image_ratio > 1: set max h to height
                         h = height
+
+                elif self.image_ratio:
+                    # random crop but adjusted to image_ratio
+                    if self.image_ratio <= 1:
+                        w = random.uniform(0.3 * width / self.image_ratio, width)
+                        h = random.uniform(0.3 * height, height * self.image_ratio)
+                    else:
+                        w = random.uniform(0.3 * width, width * self.image_ratio)
+                        h = random.uniform(0.3 * height  / self.image_ratio, height)
+
+                    # aspect ratio constraint b/t .5 & 2 ( * image_ratio)
+                    if h / w < 0.5 * self.image_ratio or h / w > 2 * self.image_ratio:
+                        continue
                 else:
+                    # random crop without image ratio
+                    w = random.uniform(0.3 * width, width)
                     h = random.uniform(0.3 * height, height)
 
-                # aspect ratio constraint b/t .5 & 2
-                if h / w < 0.5 or h / w > 2:
-                    continue
+                    # aspect ratio constraint b/t .5 & 2
+                    if h / w < 0.5 or h / w > 2:
+                        continue
 
                 left = random.uniform(width - w)
                 top = random.uniform(height - h)
