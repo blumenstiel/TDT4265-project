@@ -80,6 +80,18 @@ class DatasetCatalog:
             'data_dir': 'tdt4265/test',
             'split': 'test'
         },
+        'tdt4265_sampling_train': {
+            'data_dir': 'tdt4265/train',
+            'split': 'train'
+        },
+        'tdt4265_sampling_val': {
+            'data_dir': 'tdt4265/train',
+            'split': 'val'
+        },
+        'tdt4265_sampling_test': {
+            'data_dir': 'tdt4265/test',
+            'split': 'test'
+        },
         "rdd2020_train": {
             "data_dir": "RDD2020_filtered",
             "split": "train"
@@ -121,6 +133,11 @@ class DatasetCatalog:
         elif "rdd2020" in name:
             args = dict(data_dir=data_dir, split=attrs["split"])
             return dict(factory="RDDDataset", args=args)
+        elif "tdt4265_sampling" in name:
+            attrs = DatasetCatalog.DATASETS[name]
+            args = dict(data_dir=data_dir, split=attrs["split"]
+                )
+            return dict(factory="TDT4265Dataset_sampling", args=args)
         elif "tdt4265" in name:
             attrs = DatasetCatalog.DATASETS[name]
             args = dict(data_dir=data_dir, split=attrs["split"]
