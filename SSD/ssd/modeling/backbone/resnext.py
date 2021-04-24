@@ -11,6 +11,7 @@ class Resnext(nn.Module):
         # p value for dropout
         self.dropout = cfg.MODEL.BACKBONE.DROPOUT
 
+        # Additional layers
         self.add_lay5 = nn.Sequential(
             nn.Conv2d(in_channels=2048, out_channels=1024, kernel_size=1, stride=1),
             nn.BatchNorm2d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True),
@@ -59,6 +60,10 @@ class Resnext(nn.Module):
                 nn.init.zeros_(layer.bias)
 
     def forward(self, x):
+        '''
+        Using the output of layers 2, 3, and 4 of ResNext for the first three feature maps.
+        Additional layers 5, 6, and 7 are used to create the last three feature maps.
+        '''
         out_features = []
         x = self.model.conv1(x)
         x = self.model.bn1(x)
@@ -82,7 +87,7 @@ class Resnext(nn.Module):
 
 
 if __name__ == '__main__':
-    # Testing resnext layers
+    # Testing resnext layers and outputting the feature map shapes
 
     # for testing: set dropout manually and replace cfg.MODEL.BACKBONE.PRETRAINED with "True"
     model = Resnext('_')
