@@ -68,7 +68,7 @@ if __name__ == "__main__":
     else:
         new_output_dir = pathlib.Path(
             '/content/drive/MyDrive/',
-            output_dir.stem + "_tdt4265"
+            args.new_dir
         )
 
     # Copy checkpoint
