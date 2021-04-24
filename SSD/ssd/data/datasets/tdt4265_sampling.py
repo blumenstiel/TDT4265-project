@@ -69,7 +69,11 @@ class TDT4265Dataset_sampling(torch.utils.data.Dataset):
         for id in drop:
             self.image_ids.remove(id)
 
-        # empirically determined values that lead to a more or less balanced dataset
+        # drop duplicate ids
+        d10 = list(set(d10))
+        d20 = list(set(d20))
+        d40 = list(set(d40))
+        # empirically determined values that lead to a more balanced dataset
         d20 = d20 * 2
         d40 = d40 * 2
         self.image_ids.extend(d10)
