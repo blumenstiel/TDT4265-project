@@ -29,6 +29,7 @@ if __name__ == "__main__":
     print('D10:', len(d10))
     print('D20:', len(d20))
     print('D40:', len(d40))
+    # drop duplicates in the list
     d10 = list(set(d10))
     # add images that have a D10 label to the dataset again to double its number
     content_list.extend(d10)

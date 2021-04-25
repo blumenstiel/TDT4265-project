@@ -62,7 +62,6 @@ class TDT4265Dataset_sampling(torch.utils.data.Dataset):
         print('D10:', len(d10))
         print('D20:', len(d20))
         print('D40:', len(d40))
-        print('drop_d00:', len(drop_d00))
 
         # drop 10,000 images that only contain D00
         drop = drop_d00[:7500]
@@ -79,7 +78,7 @@ class TDT4265Dataset_sampling(torch.utils.data.Dataset):
         self.image_ids.extend(d10)
         self.image_ids.extend(d20)
         self.image_ids.extend(d40)
-        print('Number images new:', len(self.image_ids))
+        print('\nNumber images new:', len(self.image_ids))
         d00 = []
         d10 = []
         d20 = []
