@@ -45,7 +45,7 @@ class Resnext(nn.Module):
             nn.ReLU(inplace=True),
         )
 
-        # initialize weights using xavier initialization
+        # initialize weights using Xavier initialization
         for layer in self.add_lay5:
             if isinstance(layer, nn.Conv2d):
                 nn.init.xavier_uniform_(layer.weight)
