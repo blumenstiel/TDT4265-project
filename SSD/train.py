@@ -51,6 +51,7 @@ def start_train(cfg):
         )
 
     # Add scheduler for adjusting learning rate during training
+    # found at https://www.kaggle.com/isbhargav/guide-to-pytorch-learning-rate-scheduling
     if cfg.SOLVER.LR_SCHEDULER == 'LambdaLR':
         # set lambda function
         lambda_func = lambda step: max(cfg.SOLVER.LAMBDA ** (step/1000), (cfg.SOLVER.LR_MIN/cfg.SOLVER.LR))
